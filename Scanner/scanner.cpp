@@ -4,6 +4,10 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include "parser.cpp" // Include the parser header file
+
+// Forward declaration of Node structure
+struct Node;
 
 using namespace std;
 
@@ -119,11 +123,18 @@ int main() {
     ifstream inputFile(inputFileName);
     ofstream outputFile(outputFileName);
 
-    // Read input file
-    if (!inputFile.is_open() || !outputFile.is_open()) {
-        cerr << "Error: Unable to open file!" << endl;
+    // Check if input file is open
+    if (!inputFile.is_open()) {
+        cerr << "Error: Unable to open input file: " << inputFileName << endl;
         return 1;
     }
+
+    // Check if output file is open
+    if (!outputFile.is_open()) {
+        cerr << "Error: Unable to open output file: " << outputFileName << endl;
+        return 1;
+    }
+
 
     stringstream buffer;
     buffer << inputFile.rdbuf();
@@ -131,14 +142,32 @@ int main() {
 
     vector<Token> tokens = tokenize(code);
 
-    // Write output file
+        // Convert tokens to lists for the parser
+    vector<string> tokens_list;
+    vector<string> code_list;
+    for (const auto& token : tokens) {
+        tokens_list.push_back(token.type);
+        code_list.push_back(token.value);
+    }
+
+    // Initialize and run the parser
+    Parser parser;
+    parser.set_tokens_list_and_code_list(tokens_list, code_list);
+    parser.run();
+
+    // Output the syntax tree to the output file
+    printSyntaxTree(parser.parse_tree, outputFile);
+
+    cout << "Tokenization and parsing completed. Check the output file." << endl;
+
+    /*
     for (const auto& token : tokens) {
         outputFile << token.value << ", " << token.type << endl;
     }
 
-    cout << "Tokenization completed. Check the output file." << endl;
-
+*/
     inputFile.close();
     outputFile.close();
     return 0;
+
 }

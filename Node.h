@@ -1,8 +1,6 @@
 #ifndef NODE_H
 #define NODE_H
 
-#pragma once
-
 #include <string>
 #include <vector>
 
@@ -10,21 +8,26 @@ struct Token {
     std::string value;
     std::string type;
 };
-class Node
-{
+
+class Node {
 public:
     Node();
     Node(Token token);
     void makeOpToken(Token token);
-    void addChild(Node *node);
     Token get();
     std::vector<Node*> getChildren();
+    void addChild(Node* node);
+    void setSibling(Node* node);
+    Node* getSibling();
+    void setIndex(int idx);
+    int getIndex();
     ~Node();
 
 private:
-  Token token;
-  std::vector<Node*> children;
-
+    Token token;
+    std::vector<Node*> children;
+    Node* sibling;
+    int index;
 };
 
-#endif
+#endif // NODE_H
