@@ -12,12 +12,11 @@ public:
     vector<string> code_list;
     int tmp_index;
     string token;
-    Node* parse_tree;
     unordered_map<int, vector<string>> nodes_table;
     vector<pair<int, int>> edges_table;
     vector<pair<int, int>> same_rank_nodes;
 
-    Parser() : tmp_index(0), parse_tree(nullptr) {}
+    Parser() : tmp_index(0) {}
 
     void set_tokens_list_and_code_list(vector<string> x, vector<string> y) {
         code_list = y;
@@ -212,81 +211,14 @@ public:
         return t;
     }
 
-    void create_nodes_table(Node* args = nullptr) {
-        if (args == nullptr) {
-            parse_tree->setIndex(tmp_index);
-            nodes_table[tmp_index] = {parse_tree->get().value, parse_tree->get().type};
-            tmp_index++;
-            if (!parse_tree->getChildren().empty()) {
-                for (Node* i : parse_tree->getChildren()) {
-                    create_nodes_table(i);
-                }
-            }
-            if (parse_tree->getSibling() != nullptr) {
-                create_nodes_table(parse_tree->getSibling());
-            }
-        } else {
-            args->setIndex(tmp_index);
-            nodes_table[tmp_index] = {args->get().value, args->get().type};
-            tmp_index++;
-            if (!args->getChildren().empty()) {
-                for (Node* i : args->getChildren()) {
-                    create_nodes_table(i);
-                }
-            }
-            if (args->getSibling() != nullptr) {
-                create_nodes_table(args->getSibling());
-            }
-        }
-    }
-
-    void create_edges_table(Node* args = nullptr) {
-        if (args == nullptr) {
-            if (!parse_tree->getChildren().empty()) {
-                for (Node* i : parse_tree->getChildren()) {
-                    edges_table.push_back({parse_tree->getIndex(), i->getIndex()});
-                }
-                for (Node* j : parse_tree->getChildren()) {
-                    create_edges_table(j);
-                }
-            }
-            if (parse_tree->getSibling() != nullptr) {
-                edges_table.push_back({parse_tree->getIndex(), parse_tree->getSibling()->getIndex()});
-                same_rank_nodes.push_back({parse_tree->getIndex(), parse_tree->getSibling()->getIndex()});
-                create_edges_table(parse_tree->getSibling());
-            }
-        } else {
-            if (!args->getChildren().empty()) {
-                for (Node* i : args->getChildren()) {
-                    edges_table.push_back({args->getIndex(), i->getIndex()});
-                }
-                for (Node* j : args->getChildren()) {
-                    create_edges_table(j);
-                }
-            }
-            if (args->getSibling() != nullptr) {
-                edges_table.push_back({args->getIndex(), args->getSibling()->getIndex()});
-                same_rank_nodes.push_back({args->getIndex(), args->getSibling()->getIndex()});
-                create_edges_table(args->getSibling());
-            }
-        }
-    }
-
     void run() {
-        parse_tree = stmt_sequence(); // create parse tree
-        create_nodes_table(); // create nodes_table
-        create_edges_table(); // create edges_table
+        Node* parse_tree = stmt_sequence(); // create parse tree
         if (tmp_index == tokens_list.size() - 1) {
             cout << "success" << endl;
         } else if (tmp_index < tokens_list.size()) {
             cerr << "SyntaxError: " << token << endl;
             exit(1);
         }
-    }
-
-    void clear_tables() {
-        nodes_table.clear();
-        edges_table.clear();
     }
 };
 
