@@ -1,0 +1,8 @@
+read x;
+x := 10;
+if x < 20 then
+    read y; { comment 
+    comment }
+    y := x + 5;
+    write y;
+end
