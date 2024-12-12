@@ -34,11 +34,3 @@ void SyntaxTree::setRoot(Node *root)
 }
 
 // Destructor to clean up resources (if needed, for deep copy implementation)
-SyntaxTree::~SyntaxTree()
-{
-    // If root node needs to be deleted, do it here
-    if (root != nullptr)
-    {
-        delete root; // This will recursively delete all children due to the Node destructor
-    }
-}
