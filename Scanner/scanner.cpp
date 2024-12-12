@@ -5,8 +5,8 @@
 #include <string>
 #include <unordered_map>
 #include "scanner.h" // Include the scanner header file
-#include "parser.h"
-#include "../Node.h" // Include the Node class
+#include "../Parser/parser.h"
+#include "../Parser/Syntax-tree-parser/Node.h" // Include the Node class
 using namespace std;
 
 const unordered_map<string, string> reservedWords = {
@@ -45,7 +45,7 @@ bool isNumber(const string& str) {
 bool isIdentifier(const string& str) {
     if (str.empty() || !isalpha(str[0])) return false;
     for (char c : str) {
-        if (!isalnum(c)) return false;
+        if (!isalpha(c)) return false;
     }
     return true;
 }
