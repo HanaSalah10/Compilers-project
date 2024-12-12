@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
-#include "../Node.h" // Include the Node class
+#include "../Parser/Syntax-tree-parser/Node.h" // Include the Node class
 //#include "SyntaxTree.h" // Include the SyntaxTree class
 //#include "scanner.h" // Include the scanner header file
 #include "../Scanner/scanner.h"

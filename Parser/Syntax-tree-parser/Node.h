@@ -3,15 +3,12 @@
 
 #include <string>
 #include <vector>
+#include "../../Scanner/scanner.h"
+
+typedef char CHAR;
+typedef unsigned long DWORD;
 
 using namespace std;
-
-// Define Token structure
-struct Token
-{
-    string value;
-    string type;
-};
 
 class Node
 {
