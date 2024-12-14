@@ -72,7 +72,7 @@ void SyntaxTreeWidget::drawTree(QPainter& painter, Node* node, int x, int y, int
         childX += childSubtreeWidth + horizontalSpacing;
     }
 
-    // Handle siblings (the `next` pointer)
+    // Handle siblings (the next pointer)
     if (node->getSibling()) {
         // Calculate the position of the sibling node
         int siblingX = x + nodeWidth + horizontalSpacing;  // Place the sibling directly to the right
@@ -86,6 +86,3 @@ void SyntaxTreeWidget::drawTree(QPainter& painter, Node* node, int x, int y, int
         drawTree(painter, node->getSibling(), siblingX, siblingY, horizontalSpacing, verticalSpacing);
     }
 }
-
-
-
