@@ -17,12 +17,12 @@ SOURCES += \
     syntaxtreewidget.cpp
 
 HEADERS += \
-    Token.h \
     mainwindow.h \
     node.h \
     parser.h \
     scanner.h \
-    syntaxtreewidget.h
+    syntaxtreewidget.h \
+    token.h
 
 FORMS += \
     mainwindow.ui

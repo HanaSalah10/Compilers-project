@@ -1,4 +1,10 @@
 #include "parser.h"
+#include <fstream>
+#include <sstream>
+#include <unordered_map>
+
+using namespace std;
+
 // Parser class implementation
 Parser::Parser() : tmp_index(0) {}
 
@@ -10,17 +16,15 @@ void Parser::set_tokens_list_and_code_list(vector<string> x, vector<string> y) {
 }
 
 bool Parser::next_token() {
-    if (tmp_index == tokens_list.size()-1) {
+    if (tmp_index == tokens_list.size() - 1) {
         return false; // we have reached the end of the list
     }
     tmp_index++;
     token = tokens_list[tmp_index];
-    cout<<tmp_index;
     return true;
 }
 
 bool Parser::match(string x) {
-    cout << "Matching: " << token << " with " << x << endl; // Debugging line
     if (token == x) {
         cout<<"Token"<<token<<endl;
         next_token();
@@ -49,9 +53,8 @@ Node* Parser::statement() {
 }
 
 Node* Parser::stmt_sequence() {
-    Node* t = statement(); // Parse the first statement
+    Node* t = statement();
     Node* p = t;
-
     while (token == "SEMICOLON") {
         match("SEMICOLON"); // Consume the semicolon
         Node* q = statement(); // Parse the next statement
@@ -60,20 +63,14 @@ Node* Parser::stmt_sequence() {
             break; // Exit loop if no statement is found
         } else {
             if (t == nullptr) {
-                // Initialize the sequence with the first statement
                 t = p = q;
             } else {
-                // Traverse to the last sibling of the current node
-                while (p->getSibling() != nullptr) {
-                    p = p->getSibling();
-                }
-                // Link the new node as a sibling
                 p->setSibling(q);
+                p = q;
             }
         }
     }
-
-    return t; // Return the root of the sequence
+    return t;
 }
 
 
@@ -84,10 +81,10 @@ Node* Parser::factor() {
         t = exp();
         match("CLOSEDBRACKET");
     } else if (token == "NUMBER") {
-        t = new Node(Token{"CONSTANT", "(" + code_list[tmp_index] + ")"});
+        t = new Node(Token{"CONSTANT", "(" + code_list[tmp_index] + ")"},code_list[tmp_index]);
         match("NUMBER");
     } else if (token == "IDENTIFIER") {
-        t = new Node(Token{"IDENTIFIER", "(" + code_list[tmp_index] + ")"});
+        t = new Node(Token{"IDENTIFIER", "(" + code_list[tmp_index] + ")"},code_list[tmp_index]);
         match("IDENTIFIER");
     } else {
         cerr << "SyntaxError: " << token << endl;
@@ -99,7 +96,7 @@ Node* Parser::factor() {
 Node* Parser::term() {
     Node* t = factor();
     while (token == "MULT" || token == "DIV") {
-        Node* p = new Node(Token{"OPERATOR", "(" + code_list[tmp_index] + ")"});
+        Node* p = new Node(Token{"OPERATOR", "(" + code_list[tmp_index] + ")"},code_list[tmp_index]);
         p->addChild(t);
         t = p;
         mulop();
@@ -123,7 +120,7 @@ Node* Parser::simple_exp() {
 Node* Parser::exp() {
     Node* t = simple_exp();
     if (token == "LESSTHAN" || token == "EQUAL" || token == "GREATERTHAN") {
-        Node* p = new Node(Token{"OPERATOR", "(" + code_list[tmp_index] + ")"});
+        Node* p = new Node(Token{"OPERATOR", "(" + code_list[tmp_index] + ")"},code_list[tmp_index]);
         p->addChild(t);
         t = p;
         comparison_op();
@@ -186,7 +183,7 @@ Node* Parser::repeat_stmt() {
 }
 
 Node* Parser::assign_stmt() {
-    Node* t = new Node(Token{"ASSIGN", "(" + code_list[tmp_index] + ")"});
+    Node* t = new Node(Token{"ASSIGN", "(" + code_list[tmp_index] + ")"},code_list[tmp_index]);
     match("IDENTIFIER");
     match("ASSIGN");
     t->addChild(exp());
@@ -194,7 +191,7 @@ Node* Parser::assign_stmt() {
 }
 
 Node* Parser::read_stmt() {
-    Node* t = new Node(Token{"READ", "(" + code_list[tmp_index + 1] + ")"});
+    Node* t = new Node(Token{"READ", "(" + code_list[tmp_index + 1] + ")"},code_list[tmp_index]);
     match("READ");
     match("IDENTIFIER");
     return t;

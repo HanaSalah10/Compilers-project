@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include "Token.h"
+#include "token.h"
 typedef char CHAR;
 typedef unsigned long DWORD;
 typedef char* PZPSTR; // Define PZPSTR
