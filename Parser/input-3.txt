@@ -5,14 +5,16 @@ if x < 20 then
     y := x + 5;
     if y = 15 then
         write y;
-        if y=3 then
-           write y
-        end;
-        write y
     end
-end;
+end
 {
     this is =
     a comment;
 }
-read x
+repeat
+    read z;
+    z := x * 2;
+    if z < 50 then
+        write z;
+    end
+until x = 0;

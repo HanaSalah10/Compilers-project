@@ -5,8 +5,7 @@
 #include <string>
 #include <unordered_map>
 #include "scanner.h" // Include the scanner header file
-#include "../Parser/parser.h"
-#include "../Parser/Syntax-tree-parser/Node.h" // Include the Node class
+
 using namespace std;
 
 const unordered_map<string, string> reservedWords = {
@@ -115,4 +114,6 @@ vector<Token> tokenize(const string& code) {
             currentToken += c;
         }
     }
+    return tokens;
+}
 

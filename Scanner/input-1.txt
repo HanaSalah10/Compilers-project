@@ -1,4 +1,0 @@
-read x;
-if x < 10 then
-    write x; { comment ? }
-end
