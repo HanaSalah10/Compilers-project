@@ -5,7 +5,15 @@
 Node::Node() : sibling(nullptr), index(-1) {}
 
 // Constructor with a token
-Node::Node(Token token) : token(token), sibling(nullptr), index(-1) {}
+Node::Node(const Token& token, const std::string& value)
+    : token(token), sibling(nullptr), index(-1) 
+{
+    // If the value is provided, override the token's value
+    if (!value.empty()) {
+        this->token.value = value;
+    }
+}
+
 
 // Set the node's token
 void Node::makeOpToken(Token token) {

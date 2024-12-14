@@ -3,7 +3,6 @@
 
 #pragma once
 
-
 #include "Node.h"
 
 class SyntaxTree
@@ -22,8 +21,8 @@ public:
   // Link two nodes as siblings (same level)
   void makeSibling(Node *node1, Node *node2);
 
-      // Getter for the root node
-      Node *getRoot() const;
+  // Getter for the root node
+  Node *getRoot() const;
 
   // Setter for the root node
   void setRoot(Node *root);

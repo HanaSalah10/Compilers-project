@@ -3,8 +3,7 @@
 
 #include <string>
 #include <vector>
-#include "../../Scanner/scanner.h"
-
+#include "../Scanner/scanner.h"
 typedef char CHAR;
 typedef unsigned long DWORD;
 
@@ -20,8 +19,11 @@ private:
 
 public:
     // Constructors
-    Node();            // Default constructor
-    Node(Token token); // Constructor with a token
+    Node(); // Default constructor
+
+    // Constructor: Initialize with token type and optional value
+    Node(const Token &token, const std::string &value = "");
+   
 
     // Methods
     void makeOpToken(Token token); // Set the node's token

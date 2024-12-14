@@ -1,0 +1,12 @@
+read x; { reading variable x }
+x := 10;
+repeat
+    read y; { reading variable y }
+    y := x * 2;
+    if y = 30 then
+        write y
+    else
+        y := y - 10
+    end
+until y = 0
+
