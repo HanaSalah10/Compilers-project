@@ -56,20 +56,29 @@ vector<Token> tokenize(const string& code) {
     string currentToken;
     bool inComment = false;
 
-    for (int i = 0; i < code.length(); i++) {
+    for (size_t i = 0; i < code.length(); i++) {
         char c = code[i];
 
-        if (c == '{') {inComment = true;}
+        // Handle comments
+        if (c == '{') {
+            inComment = true;
+        }
 
         if (inComment) {
-            if (c == '}') {inComment = false;}
+            if (c == '}') {
+                inComment = false;
+            }
             continue;
         }
 
-        // Check for assign
+        // Check for assign operator
         if (c == ':' && i + 1 < code.length() && code[i + 1] == '=') {
+            if (!currentToken.empty()) {
+                tokens.push_back({currentToken, getTokenType(currentToken)});
+                currentToken.clear();
+            }
             tokens.push_back({":=", "ASSIGN"});
-            i++;
+            i++; // Skip '='
         }
         // Check if character is symbol
         else if (symbols.count(string(1, c))) {
@@ -79,22 +88,31 @@ vector<Token> tokenize(const string& code) {
             }
             tokens.push_back({string(1, c), symbols.at(string(1, c))});
         }
+        // Handle invalid characters
+        else if (!isalnum(c) && !isspace(c)) {
+            if (!currentToken.empty()) {
+                tokens.push_back({currentToken, getTokenType(currentToken)});
+                currentToken.clear();
+            }
+            cerr << "Error: Unknown character encountered: " << c << endl;
+            exit(1);
+        }
+        // Separate numbers from identifiers
+        else if (isdigit(c) && !currentToken.empty() && isalpha(currentToken[0])) {
+            tokens.push_back({currentToken, getTokenType(currentToken)});
+            currentToken.clear();
+            currentToken += c; // Start a new token for the number
+        }
+        // Whitespace: Finalize the current token
         else if (isspace(c)) {
             if (!currentToken.empty()) {
                 tokens.push_back({currentToken, getTokenType(currentToken)});
                 currentToken.clear();
             }
         }
+        // Accumulate valid characters for tokens
         else {
             currentToken += c;
         }
     }
-
-    // Process any remaining token at end of string
-    if (!currentToken.empty()) {
-        tokens.push_back({currentToken, getTokenType(currentToken)});
-    }
-
-    return tokens;
-}
 
