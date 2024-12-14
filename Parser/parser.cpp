@@ -109,24 +109,33 @@ Node* Parser::statement() {
 }
 
 Node* Parser::stmt_sequence() {
-    Node* t = statement();
+    Node* t = statement(); // Parse the first statement
     Node* p = t;
+
     while (token == "SEMICOLON") {
-        match("SEMICOLON");
-        Node* q = statement();
+        match("SEMICOLON"); // Consume the semicolon
+        Node* q = statement(); // Parse the next statement
+
         if (q == nullptr) {
-            break;
+            break; // Exit loop if no statement is found
         } else {
             if (t == nullptr) {
+                // Initialize the sequence with the first statement
                 t = p = q;
             } else {
+                // Traverse to the last sibling of the current node
+                while (p->getSibling() != nullptr) {
+                    p = p->getSibling();
+                }
+                // Link the new node as a sibling
                 p->setSibling(q);
-                p = q;
             }
         }
     }
-    return t;
+
+    return t; // Return the root of the sequence
 }
+
 
 Node* Parser::factor() {
     Node* t = nullptr;
