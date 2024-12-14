@@ -30,8 +30,7 @@ bool Parser::match(string x) {
         next_token();
         return true;
     } else {
-        cerr << "Token Mismatch: " << token << endl;
-        exit(1);
+        throw std::runtime_error("Token Mismatch: Expected '" + x + "', got '" + token + "'.");
     }
 }
 
@@ -47,7 +46,7 @@ Node* Parser::statement() {
     } else if (token == "WRITE") {
         return write_stmt();
     } else {
-        cerr << "SyntaxError: " << token << endl;
+        throw std::runtime_error("Syntax Error: " + token + "." );
         exit(1);
     }
 }
@@ -87,8 +86,7 @@ Node* Parser::factor() {
         t = new Node(Token{"IDENTIFIER", "(" + code_list[tmp_index] + ")"},code_list[tmp_index]);
         match("IDENTIFIER");
     } else {
-        cerr << "SyntaxError: " << token << endl;
-        exit(1);
+        throw std::runtime_error("Syntax Error: " + token + ".");
     }
     return t;
 }

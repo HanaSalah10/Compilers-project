@@ -60,31 +60,37 @@ void MainWindow::onBrowseFile()
 
 void MainWindow::processCode(const std::string &code)
 {
-    // Tokenize the input source code
-    std::vector<Token> tokens = tokenize(code);
-    if (tokens.empty()) {
-        QMessageBox::critical(this, "Error", "No tokens found in the input file.");
-        return;
-    }
+    try {
+        // Tokenize the input source code
+        std::vector<Token> tokens = tokenize(code);
+        if (tokens.empty()) {
+            throw std::runtime_error("No tokens found in the input file. Please select a valid file.");
+        }
 
-    // Convert tokens to lists for the parser
-    std::vector<std::string> tokens_list;
-    std::vector<std::string> code_list;
-    for (const auto &token : tokens) {
-        tokens_list.push_back(token.type);
-        code_list.push_back(token.value);
-    }
+        // Convert tokens to lists for the parser
+        std::vector<std::string> tokens_list;
+        std::vector<std::string> code_list;
+        for (const auto &token : tokens) {
+            tokens_list.push_back(token.type);
+            code_list.push_back(token.value);
+        }
 
-    // Initialize and run the parser
-    Parser parser;
-    parser.set_tokens_list_and_code_list(tokens_list, code_list);
-    Node *parse_tree = parser.stmt_sequence();
-    if (!parse_tree) {
-        QMessageBox::critical(this, "Error", "Failed to generate parse tree.");
-        return;
-    }
+        // Initialize and run the parser
+        Parser parser;
+        parser.set_tokens_list_and_code_list(tokens_list, code_list);
+        Node *parse_tree = parser.stmt_sequence();
 
-    // Display the syntax tree using your existing logic
-    SyntaxTreeWidget *widget = new SyntaxTreeWidget(parse_tree);
-    widget->show();
+        if (!parse_tree) {
+            throw std::runtime_error("Failed to generate parse tree.");
+        }
+
+        // Display the syntax tree
+        SyntaxTreeWidget *widget = new SyntaxTreeWidget(parse_tree);
+        widget->show();
+
+    } catch (const std::exception &e) {
+        QMessageBox::critical(this, "Parsing Error", QString("%1").arg(e.what()));
+    } catch (...) {
+        QMessageBox::critical(this, "Unknown Error", "An unexpected error occurred.");
+    }
 }
