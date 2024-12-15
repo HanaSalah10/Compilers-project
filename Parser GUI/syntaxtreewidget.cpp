@@ -55,7 +55,7 @@ void SyntaxTreeWidget::drawTree(QPainter& painter, Node* node, int x, int y, int
     painter.setPen(Qt::black);
 
     if(node->get().value == "IF" ||
-        node->get().value == "read" ||
+        node->get().value == "READ" ||
         node->get().value == "ASSIGN" ||
         node->get().value == "REPEAT" ||
         node->get().value == "WRITE"){
