@@ -46,10 +46,10 @@ Node* Parser::statement() {
     } else if (token == "WRITE") {
         return write_stmt();
     } else {
-        throw std::runtime_error("Syntax Error: " + token + "." );
-        exit(1);
+        throw std::runtime_error("Syntax Error: Unexpected token '" + token + "'.");
     }
 }
+
 
 Node* Parser::stmt_sequence() {
     Node* t = statement();

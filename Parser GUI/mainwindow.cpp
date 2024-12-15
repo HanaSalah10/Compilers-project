@@ -85,7 +85,8 @@ void MainWindow::processCode(const std::string &code)
 {
     try {
         // Tokenize the input source code
-        std::vector<Token> tokens = tokenize(code);
+        std::vector<Token> tokens = tokenize(code); // This might throw an exception
+
         if (tokens.empty()) {
             throw std::runtime_error("No tokens found in the input file. Please select a valid file.");
         }
@@ -117,9 +118,12 @@ void MainWindow::processCode(const std::string &code)
         tree = new SyntaxTreeWidget(parse_tree, this);
         scrollArea->setWidget(tree);
 
+    } catch (const std::runtime_error &e) {
+        QMessageBox::critical(this, "Error", QString::fromStdString(e.what()));
     } catch (const std::exception &e) {
-        QMessageBox::critical(this, "Parsing Error", QString("%1").arg(e.what()));
+        QMessageBox::critical(this, "Error", QString::fromStdString(e.what()));
     } catch (...) {
         QMessageBox::critical(this, "Unknown Error", "An unexpected error occurred.");
     }
 }
+

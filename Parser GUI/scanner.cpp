@@ -25,9 +25,8 @@ string getTokenType(const string& token) {
     if (isNumber(token)) return "NUMBER";
     if (isIdentifier(token)) return "IDENTIFIER";
 
-    // Exit with error if the token is unknown
-    cerr << "Error: Unknown token encountered: " << token << endl;
-    exit(1);
+    // Throw an exception for unknown tokens
+    throw runtime_error("Error: Unknown token encountered: " + token);
 }
 
 // Check if a string is a number
