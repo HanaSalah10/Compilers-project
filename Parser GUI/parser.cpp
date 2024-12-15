@@ -80,10 +80,10 @@ Node* Parser::factor() {
         t = exp();
         match("CLOSEDBRACKET");
     } else if (token == "NUMBER") {
-        t = new Node(Token{"CONSTANT", "(" + code_list[tmp_index] + ")"},code_list[tmp_index]);
+        t = new Node(Token{"CONSTANT", "(" + code_list[tmp_index] + ")"});
         match("NUMBER");
     } else if (token == "IDENTIFIER") {
-        t = new Node(Token{"IDENTIFIER", "(" + code_list[tmp_index] + ")"},code_list[tmp_index]);
+        t = new Node(Token{"IDENTIFIER", "(" + code_list[tmp_index] + ")"});
         match("IDENTIFIER");
     } else {
         throw std::runtime_error("Syntax Error: " + token + ".");
@@ -94,7 +94,7 @@ Node* Parser::factor() {
 Node* Parser::term() {
     Node* t = factor();
     while (token == "MULT" || token == "DIV") {
-        Node* p = new Node(Token{"OPERATOR", "(" + code_list[tmp_index] + ")"},code_list[tmp_index]);
+        Node* p = new Node(Token{"OPERATOR", "(" + code_list[tmp_index] + ")"});
         p->addChild(t);
         t = p;
         mulop();
@@ -117,8 +117,8 @@ Node* Parser::simple_exp() {
 
 Node* Parser::exp() {
     Node* t = simple_exp();
-    if (token == "LESSTHAN" || token == "EQUAL" || token == "GREATERTHAN") {
-        Node* p = new Node(Token{"OPERATOR", "(" + code_list[tmp_index] + ")"},code_list[tmp_index]);
+    if (token == "LESSTHAN" || token == "EQUAL") {
+        Node* p = new Node(Token{"OPERATOR", "(" + code_list[tmp_index] + ")"});
         p->addChild(t);
         t = p;
         comparison_op();
@@ -181,7 +181,7 @@ Node* Parser::repeat_stmt() {
 }
 
 Node* Parser::assign_stmt() {
-    Node* t = new Node(Token{"ASSIGN", "(" + code_list[tmp_index] + ")"},code_list[tmp_index]);
+    Node* t = new Node(Token{"ASSIGN", "(" + code_list[tmp_index] + ")"});
     match("IDENTIFIER");
     match("ASSIGN");
     t->addChild(exp());
@@ -189,7 +189,7 @@ Node* Parser::assign_stmt() {
 }
 
 Node* Parser::read_stmt() {
-    Node* t = new Node(Token{"READ", "(" + code_list[tmp_index + 1] + ")"},code_list[tmp_index]);
+    Node* t = new Node(Token{"READ", "(" + code_list[tmp_index + 1] + ")"});
     match("READ");
     match("IDENTIFIER");
     return t;

@@ -1,33 +1,56 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <QFileDialog>
-#include <QMessageBox>
+#include <QLabel>
 #include <fstream>
 #include <sstream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , tree(nullptr) // Initialize tree pointer
 {
     ui->setupUi(this);
 
     // Set window properties
     setWindowTitle("Syntax Tree Viewer");
     resize(800, 600);
-
-    // Create a button to browse files
+    QHBoxLayout *fileLayout= new QHBoxLayout();
+    QLabel *fileLabel = new QLabel("File", this);
     QPushButton *browseButton = new QPushButton("Browse File", this);
-    connect(browseButton, &QPushButton::clicked, this, &MainWindow::onBrowseFile);
+    browseButton->setFixedSize(80,25);
 
-    // Create a layout and add the button
-    QVBoxLayout *layout = new QVBoxLayout();
-    layout->addWidget(browseButton);
+    fileLayout->setSpacing(10);
 
-    // Set the layout to the central widget
+    fileLayout->addWidget(fileLabel);
+    fileLayout->addWidget(browseButton);
+    fileLayout->addStretch(0);
+
+
+    QGroupBox *groupBox = new QGroupBox("Syntax Tree", this);
+    groupBox->setAlignment(Qt::AlignLeft);
+
+    scrollArea = new QScrollArea(this);
+    scrollArea->setWidgetResizable(true); // Allow the widget to resize within the scroll area
+
+    treePlaceholder = new QWidget(this);
+    scrollArea->setWidget(treePlaceholder);
+
+    QVBoxLayout *groupBoxLayout = new QVBoxLayout();
+    groupBoxLayout->addWidget(scrollArea);
+    groupBox->setLayout(groupBoxLayout);
+
+    // Main layout
+    layout = new QVBoxLayout();
+    layout->addLayout(fileLayout);
+    layout->addWidget(groupBox);
+
+
     QWidget *centralWidget = new QWidget(this);
     centralWidget->setLayout(layout);
     setCentralWidget(centralWidget);
+
+     connect(browseButton, &QPushButton::clicked, this, &MainWindow::onBrowseFile);
 }
 
 MainWindow::~MainWindow()
@@ -84,9 +107,15 @@ void MainWindow::processCode(const std::string &code)
             throw std::runtime_error("Failed to generate parse tree.");
         }
 
-        // Display the syntax tree
-        SyntaxTreeWidget *widget = new SyntaxTreeWidget(parse_tree);
-        widget->show();
+        // Remove the old tree widget if it exists
+        if (tree) {
+            scrollArea->takeWidget(); // Detach the old widget
+            tree->deleteLater();
+        }
+
+        // Add the new tree widget
+        tree = new SyntaxTreeWidget(parse_tree, this);
+        scrollArea->setWidget(tree);
 
     } catch (const std::exception &e) {
         QMessageBox::critical(this, "Parsing Error", QString("%1").arg(e.what()));

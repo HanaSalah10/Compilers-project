@@ -6,6 +6,9 @@
 #include <QVBoxLayout>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QScrollArea>
+#include <QGroupBox>
+#include <QHBoxLayout>
 #include <vector>
 #include <string>
 #include "parser.h"
@@ -29,6 +32,10 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    SyntaxTreeWidget *tree = nullptr;
+    QWidget *treePlaceholder = nullptr;
+    QVBoxLayout *layout ;
+    QScrollArea * scrollArea;
 
     void processCode(const std::string &code);
 };

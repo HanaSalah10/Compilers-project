@@ -20,7 +20,7 @@ protected:
     {
         QPainter painter(this);
         painter.setRenderHint(QPainter::Antialiasing);  // Smooth rendering
-        drawTree(painter, m_root, width() / 2, 40, 40,60);  // Start from the center and top
+        drawTree(painter, m_root, width() / 2, 40, 50,60);  // Start from the center and top
     }
 };
 
