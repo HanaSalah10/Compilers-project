@@ -2,7 +2,9 @@
 
 SyntaxTreeWidget::SyntaxTreeWidget(Node* root,QWidget *parent)
     :QWidget(parent),m_root(root)
-{}
+{
+    setFixedSize(2000,2000);
+}
 
 int SyntaxTreeWidget::calculateTotalWidth(Node* node, int horizontalSpacing) {
     if (!node) return 0;
@@ -77,7 +79,6 @@ void SyntaxTreeWidget::drawTree(QPainter& painter, Node* node, int x, int y, int
         int childCenterX = childX + childSubtreeWidth / 2;
 
         // Draw the line to the child
-        painter.setPen(Qt::white);
         painter.drawLine(x, y + nodeHeight / 2, childCenterX, childY - nodeHeight / 2);
 
         // Draw the child recursively
@@ -93,8 +94,6 @@ void SyntaxTreeWidget::drawTree(QPainter& painter, Node* node, int x, int y, int
         int siblingX = x + nodeWidth + horizontalSpacing;  // Place the sibling directly to the right
         int siblingY = y;  // Same vertical level as the current node
 
-        // Draw the line to the sibling
-        painter.setPen(Qt::white);
         painter.drawLine(x + nodeWidth / 2, y, siblingX, siblingY);
 
         // Draw the sibling recursively

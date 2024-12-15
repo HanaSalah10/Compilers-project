@@ -33,6 +33,9 @@ MainWindow::MainWindow(QWidget *parent)
     scrollArea = new QScrollArea(this);
     scrollArea->setWidgetResizable(true); // Allow the widget to resize within the scroll area
 
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
     treePlaceholder = new QWidget(this);
     scrollArea->setWidget(treePlaceholder);
 
